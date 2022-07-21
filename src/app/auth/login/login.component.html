@@ -1,0 +1,37 @@
+<div class="grid place-content-center h-screen bg-slate-100">
+    <form autocomplete="false" [formGroup]="requestModel" autocomplete="off">
+        <div class="w-96 bg-white py-8 px-6 rounded-xl my-8 flex flex-col" style="border-width: 1px;">
+            <div class="text-2xl font-medium text-center mb-8">Login</div>
+            <div *ngIf="!!error" class="w-full bg-red-300 p-4 mb-4 cursor-pointer"
+                (click)="clearMsg()">
+                {{error}}
+            </div>
+            <div *ngIf="!!msg" class="w-full bg-green-200 p-4 mb-4 cursor-pointer"
+                (click)="clearMsg()">
+                {{msg}}
+            </div>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input id="email" matInput formControlName="email" required type="email">
+            </mat-form-field>
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input id="password" matInput formControlName="password" required type="password">
+            </mat-form-field>
+            <button id="submit" mat-raised-button color="primary" class="w-full" (click)="onSubmit()">
+                <div class="p-2">
+                    Login
+                </div>
+            </button>
+            <div class="py-8">
+                <mat-divider></mat-divider>
+            </div>
+            <div class="text-sm text-center">
+                Don't have an account? | <a routerLink="../register" class="text-blue-600">Sign up</a>
+            </div>
+        </div>
+    </form>
+    <div>
+        <!-- <app-footer></app-footer> -->
+    </div>
+</div>
