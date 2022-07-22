@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, throwError } from 'rxjs';
@@ -10,11 +10,15 @@ import { AuthResponse } from './auth-response';
   providedIn: 'root'
 })
 export class AuthService {
-  currentUser?: AuthResponse;
+  tokens?: AuthResponse;
   err?: string;
   msg?: string;
 
   constructor(private http: HttpClient, private router: Router) { }
+
+  isLoggedIn(): boolean {
+    return this.tokens != undefined;
+  }
 
   login(authRequest: AuthRequest): Observable<AuthResponse> {
     console.log('Logging in user ', authRequest)
@@ -38,9 +42,10 @@ export class AuthService {
   }
 
   logout(): void {
-    this.currentUser = undefined;
+    this.tokens = undefined;
     this.err = undefined;
     localStorage.removeItem('user');
+    localStorage.removeItem('tokens');
     this.router.navigate(['auth']);
   }
 
@@ -64,19 +69,19 @@ export class AuthService {
 
   private handleSuccessResponse(authResponse: AuthResponse) {
     localStorage.setItem('tokens', JSON.stringify(authResponse));
-    this.currentUser = authResponse;
+    this.tokens = authResponse;
     this.clearMsg();
   }
 
   autologin(): void {
     try {
-      const json = localStorage.getItem('user');
+      const json = localStorage.getItem('tokens');
       if (json) {
-        const user: AuthResponse = JSON.parse(json);
-        if (!user) {
+        const tokens: AuthResponse = JSON.parse(json);
+        if (!tokens) {
           return;
         }
-        this.currentUser = user;
+        this.tokens = tokens;
         this.err = undefined;
       }
     } catch (e) {

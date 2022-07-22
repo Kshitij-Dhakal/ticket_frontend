@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthRequest } from '../auth-request';
 import { AuthService } from '../auth.service';
 
@@ -17,31 +18,29 @@ export class LoginComponent implements OnInit {
   msg?: string;
   submittingForm?: boolean = false;
 
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
   }
 
   onSubmit() {
-    // if (!this.submittingForm) {
+    if (!this.submittingForm) {
       const authRequest: AuthRequest = {
         email: this.requestModel.value.email ?? '',
         password: this.requestModel?.value?.password ?? ''
       }
-      // if (this.requestModel.valid) {
+      if (this.requestModel.valid) {
         this.submittingForm = true;
         this.authService.login(authRequest)
         .subscribe({
           next: (v) => {
-            // this.router.navigate(['/home'])
+            this.router.navigate(['/'])
           },
           error: (e) => this.error = e,
-          complete: () => {
-            this.submittingForm = false;
-          }
         });
-      // }
-    // }
+      }
+    }
+    this.submittingForm = false;
   }
 
   clearMsg() {

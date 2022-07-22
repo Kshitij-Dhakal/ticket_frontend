@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
   {
@@ -7,16 +8,21 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
     // canActivate: [AuthGuard]
   },
-  // {
-  //   path: '',
-  //   loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
-  //   canActivate: [AuthGuard]
-  // },
-  // {
-  //   path: 'rekt',
-  //   loadChildren: () => import('./rekt/rekt.module').then(m => m.RektModule),
-  //   canActivate: [BlacklistGuard]
-  // },
+  {
+    path: '',
+    loadChildren: () => import('./shows/shows.module').then(m => m.ShowsModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard',
+    loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'reserve/:show',
+    loadChildren: () => import('./reserve/reserve.module').then(m => m.ReserveModule),
+    canActivate: [AuthGuard]
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
