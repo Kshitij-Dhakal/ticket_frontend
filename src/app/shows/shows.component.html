@@ -2,7 +2,7 @@
     <mat-spinner></mat-spinner>
 </div>
 <div *ngIf="!loading" class="grid place-content-center w-screen p-8">
-    <div class="grid grid-cols-2 grid-flow-row gap-16 overflow-y-auto">
+    <div class="grid grid-cols-2 grid-flow-row gap-16">
         <ng-container *ngFor="let show of shows;">
             <div>
                 <img src="{{show.movie?.displayPic}}" alt="{{show.movie?.name}}" class="float-right">
@@ -21,7 +21,7 @@
                         <span class="text-base">{{show.hall?.name}}</span>
                     </div>
                     <div>
-                        <b>Hall</b> : <span class="text-base">{{show.date}}</span>
+                        <b>Hall</b> : <span class="text-base">{{show.date | date}}</span>
                     </div>
                     <div>
                         <b>Total</b> : <span class="text-base"> {{show.hall?.capacity}}</span>

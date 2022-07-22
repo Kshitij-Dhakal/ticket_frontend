@@ -1,5 +1,5 @@
 <div class="grid place-content-center h-screen bg-slate-100">
-    <form autocomplete="false" [formGroup]="requestModel" autocomplete="off">
+    <form [formGroup]="requestModel" autocomplete="off">
         <div class="w-96 bg-white py-8 px-6 rounded-xl my-8 flex flex-col" style="border-width: 1px;">
             <div class="text-2xl font-medium text-center mb-8">Login</div>
             <div *ngIf="!!error" class="w-full bg-red-300 p-4 mb-4 cursor-pointer"
