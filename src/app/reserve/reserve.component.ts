@@ -5,6 +5,7 @@ import { ShowsService } from '../shows/shows.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Card } from './card';
 import { Ticket } from './ticket';
+import { ReservedSeats } from './reserved-seats';
 
 @Component({
   selector: 'app-reserve',
@@ -24,8 +25,9 @@ export class ReserveComponent implements OnInit {
   msg?: string;
   submittingForm: boolean = false;
   reserved: boolean = false;
-  reservedCount = 0;
-
+  reservedSeats = new Map<number, boolean>();
+  newRervations = new Map<number, boolean>();
+  reservedCount: number = 0;
 
   constructor(private route: ActivatedRoute,
     private showService: ShowsService) { }
@@ -36,7 +38,10 @@ export class ReserveComponent implements OnInit {
       this.showService.getShowById(this.showId)
         .subscribe((next) => {
           this.show = next;
-          this.reservedCount = this.show.reserved ?? this.reservedCount
+          this.show.reservedSeats?.forEach((it) => {
+            this.reservedSeats.set(it.seat!, true);
+            this.reservedCount++;
+          })
         });
     });
   }
@@ -51,13 +56,22 @@ export class ReserveComponent implements OnInit {
         cvv: +(this.requestModel.value.cvv ?? 0)
       }
       const ticket: Ticket = {
-        show: this.show
+        show: this.show,
+      }
+      const newReservations: ReservedSeats[] = []
+      for (const it of this.newRervations) {
+        if (it[1]) {
+          newReservations.push({ seat: +it[0] })
+        }
+      };
+      if(newReservations.length==0) {
+        this.error = 'Add new reservations.';
       }
       if (this.requestModel.valid) {
         this.submittingForm = true;
         //submit to service
         this.showService
-          .reserveTicket({ card: card, ticket: ticket })
+          .reserveTicket({ card: card, ticket: ticket, reservedSeats: newReservations })
           .subscribe({
             next: (v) => {
               this.reservedCount++;
@@ -67,5 +81,25 @@ export class ReserveComponent implements OnInit {
       }
     }
     this.submittingForm = false;
+  }
+
+  isBooked(i: number, j: number, row: string): boolean {
+    return this.reservedSeats.get(this.getSeatNumber(i, j)) ?? false;
+  }
+
+  private getSeatNumber(i: number, j: number) {
+    return i * 10 + j;
+  }
+
+  isNewReservation(i: number, j: number): boolean {
+    return this.newRervations.get(this.getSeatNumber(i, j)) ?? false;
+  }
+
+  selectSeat(i: number, j: number) {
+    const sn = this.getSeatNumber(i, j);
+    if (!this.reservedSeats.has(sn)) {
+      const isReserved = this.newRervations.get(sn) ?? false;
+      this.newRervations.set(this.getSeatNumber(i, j), !isReserved);
+    }
   }
 }

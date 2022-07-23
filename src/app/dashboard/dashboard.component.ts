@@ -36,9 +36,7 @@ export class DashboardComponent implements OnInit {
       .append("g")
       .attr("transform", "translate(" + this.margin + "," + this.margin + ")");
 
-    console.log(this.data)
     const domain = this.data!.map(d => this.getDate(d));
-    console.log(domain)
     // Create the X-axis band scale
     const x = d3.scaleBand()
       .range([0, this.width])
