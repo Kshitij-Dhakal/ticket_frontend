@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatInputModule,
     MatDatepickerModule,
     ReactiveFormsModule,
-
+    SharedModule
   ]
 })
 export class ReserveModule { }

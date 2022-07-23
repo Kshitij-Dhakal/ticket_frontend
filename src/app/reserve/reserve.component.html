@@ -1,9 +1,10 @@
-<div class="grid place-content-center w-screen h-screen gap-10">
-    <div class="text-3xl">Book tickets for the show now</div>
+<app-header></app-header>
+<div class="grid place-content-center w-screen h-screen gap-10 overflow-auto">
+    <!-- <div class="text-3xl">Book tickets for the show now</div> -->
     <div *ngIf="error" class="bg-red-400 text-white p-2 text-lg text-center">{{error}}</div>
-    <div class="grid lg:grid-flow-col sm:grid-flow-row w-full gap-20">
-        <div class="grid grid-flow-row w-96">
-            <div class="border rounded-sm mr-10 pr-10 pt-10">
+    <div class="grid lg:grid-flow-col sm:grid-flow-row w-full gap-32">
+        <div class="grid grid-flow-row w-96 gap-20">
+            <div class="border rounded-sm pt-10">
                 <h1>{{show?.movie?.name}}</h1>
                 <div class="py-3"></div>
                 <div class="grid grid-flow-col gap-16">

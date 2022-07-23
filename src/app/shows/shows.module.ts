@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatButtonModule} from '@angular/material/button';
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
@@ -18,6 +19,7 @@ import {MatButtonModule} from '@angular/material/button';
     MatProgressSpinnerModule,
     MatButtonModule,
     HttpClientModule,
+    SharedModule
   ]
 })
 export class ShowsModule { }
