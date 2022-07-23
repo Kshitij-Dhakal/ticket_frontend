@@ -10,6 +10,9 @@ import { Ticket } from '../reserve/ticket';
   providedIn: 'root'
 })
 export class ShowsService {
+  getAllReservations(): Observable<Ticket[]> {
+    return this.http.get<Ticket[]>(`${environment.apiURL}/api/dashboard/tickets`);
+  }
   reserveTicket(reserveRequest: ReserveRequest): Observable<Ticket> {
     return this.http.post<Ticket>(`${environment.apiURL}/api/ticket`, reserveRequest);
   }

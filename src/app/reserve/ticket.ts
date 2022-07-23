@@ -1,7 +1,8 @@
 import { Movie } from "../shows/movie"
+import { Show } from "../shows/shows"
 
 export interface Ticket {
     id?: number
-    show?: Movie
+    show?: Show
     date?: number
 }
