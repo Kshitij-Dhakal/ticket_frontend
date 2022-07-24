@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
     let barData: Map<string, number> = new Map();
     this.data?.forEach(e => {
       const d = this.getDate(e)
-      barData.set(d, (barData.get(d) ?? 0) + 1)
+      barData.set(d, (barData.get(d) ?? 0) + e.show?.reservedSeats?.length!)
     });
 
     // Create and fill the bars
@@ -103,7 +103,7 @@ export class DashboardComponent implements OnInit {
 
     // Create the Y-axis band scale
     const y = d3.scaleLinear()
-      .domain([0, 20])
+      .domain([0, 50])
       .range([this.height, 0]);
 
     // Draw the Y-axis on the DOM
@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
     let barData: Map<string, number> = new Map();
     this.data?.forEach(e => {
       const d = e.show?.movie?.name!
-      barData.set(d, (barData.get(d) ?? 0) + 1)
+      barData.set(d, (barData.get(d) ?? 0) + e.show?.reservedSeats?.length!)
     });
 
     // Create and fill the bars
@@ -131,4 +131,5 @@ export class DashboardComponent implements OnInit {
   getDate(ticket?: Ticket): string {
     return new Intl.DateTimeFormat('en-US').format(new Date(ticket?.date?.toString()!))
   }
+
 }
