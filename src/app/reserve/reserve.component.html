@@ -1,92 +1,93 @@
-<app-header></app-header>
-<div class="grid place-content-center w-screen h-screen gap-10 overflow-auto">
-    <!-- <div class="text-3xl">Book tickets for the show now</div> -->
-    <div *ngIf="error" class="bg-red-400 text-white p-2 text-lg text-center">{{error}}</div>
-    <div class="grid lg:grid-flow-col sm:grid-flow-row w-full gap-32">
-        <div class="grid grid-flow-row w-96 gap-20">
-            <div class="border rounded-sm pt-10">
-                <h1>{{show?.movie?.name}}</h1>
-                <div class="py-3"></div>
-                <div class="grid grid-flow-col gap-16">
-                    <div>
-                        <img src="{{show?.movie?.displayPic}}" alt="{{show?.movie?.name}}" class="float-right">
-                    </div>
-                    <div class="flex flex-col">
+<div class="h-full flex flex-col">
+    <app-header class="flex-1"></app-header>
+    <div class="grid w-screen h-screen gap-10 overflow-auto justify-center p-16">
+        <!-- <div class="text-3xl">Book tickets for the show now</div> -->
+        <div *ngIf="error" class="bg-red-400 text-white p-2 text-lg text-center">{{error}}</div>
+        <div class="grid lg:grid-flow-col sm:grid-flow-row w-full gap-32">
+            <div class="grid grid-flow-row w-96 gap-20">
+                <div class="border rounded-sm pt-10">
+                    <h1>{{show?.movie?.name}}</h1>
+                    <div class="py-3"></div>
+                    <div class="grid grid-flow-col gap-16">
                         <div>
-                            <div>
-                                {{show?.id}}
-                            </div>
+                            <img src="{{show?.movie?.displayPic}}" alt="{{show?.movie?.name}}" class="float-right">
                         </div>
-                        <div>
+                        <div class="flex flex-col">
                             <div>
-                                <span class="text-base">{{show?.hall?.name}}</span>
+                                <div>
+                                    {{show?.id}}
+                                </div>
                             </div>
                             <div>
-                                <b>Hall</b> : <span class="text-base">{{show?.date | date}}</span>
+                                <div>
+                                    <span class="text-base">{{show?.hall?.name}}</span>
+                                </div>
+                                <div>
+                                    <b>Hall</b> : <span class="text-base">{{show?.date | date}}</span>
+                                </div>
+                                <div>
+                                    <b>Total</b> : <span class="text-base"> {{show?.hall?.capacity}}</span>
+                                </div>
+                                <div>
+                                    <b>Reserved</b> : <span class="text-base">{{reservedCount}}</span>
+                                </div>
                             </div>
-                            <div>
-                                <b>Total</b> : <span class="text-base"> {{show?.hall?.capacity}}</span>
-                            </div>
-                            <div>
-                                <b>Reserved</b> : <span class="text-base">{{reservedCount}}</span>
-                            </div>
-                        </div>
-                        <div class="flex-1"></div>
+                            <div class="flex-1"></div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div>
-                <form autocomplete="off" [formGroup]="requestModel">
-                    <h1>Confirm Purchase</h1>
-                    <div class="flex flex-col py-2">
-                        <label for="card-number" class="pb-2">Card Number</label>
-                        <input type="text" id="card-number" class="card-input" formControlName="number" required>
-                    </div>
-                    <div class="flex flex-col py-2">
-                        <label for="owner" class="pb-2">Name on card</label>
-                        <input type="text" id="owner" class="card-input" formControlName="owner" required>
-                    </div>
-                    <div class="grid grid-flow-col gap-2 justify-between">
+                <div>
+                    <form autocomplete="off" [formGroup]="requestModel">
+                        <h1>Confirm Purchase</h1>
                         <div class="flex flex-col py-2">
-                            <label for="expire" class="pb-2">Expire</label>
-                            <input type="date" id="expire" class="card-input" formControlName="expiry" required>
+                            <label for="card-number" class="pb-2">Card Number</label>
+                            <input type="text" id="card-number" class="card-input" formControlName="number" required>
                         </div>
                         <div class="flex flex-col py-2">
-                            <label for="cvv" class="pb-2">CVV</label>
-                            <input type="text" id="cvv" class="card-input" formControlName="cvv" required>
+                            <label for="owner" class="pb-2">Name on card</label>
+                            <input type="text" id="owner" class="card-input" formControlName="owner" required>
                         </div>
-                    </div>
-                    <div class="pt-4" *ngIf="reservedCount > (show?.hall?.capacity??0)">
-                        <span>
-                            You cannot reserve ticket for this show. All tickets have already been booked.
-                        </span>
-                    </div>
+                        <div class="grid grid-flow-col gap-2 justify-between">
+                            <div class="flex flex-col py-2">
+                                <label for="expire" class="pb-2">Expire</label>
+                                <input type="date" id="expire" class="card-input" formControlName="expiry" required>
+                            </div>
+                            <div class="flex flex-col py-2">
+                                <label for="cvv" class="pb-2">CVV</label>
+                                <input type="text" id="cvv" class="card-input" formControlName="cvv" required>
+                            </div>
+                        </div>
+                        <div class="pt-4" *ngIf="reservedCount > (show?.hall?.capacity??0)">
+                            <span>
+                                You cannot reserve ticket for this show. All tickets have already been booked.
+                            </span>
+                        </div>
 
-                    <div class="pt-4" *ngIf="reservedCount < (show?.hall?.capacity??0)">
-                        <div *ngIf="!reserved">
-                            <button
-                                class="w-full h-12 rounded-md bg-indigo-500 text-white font-bold text-base tracking-wider active:bg-indigo-600 hover:bg-indigo-600"
-                                (click)="onSubmit()">Confirm</button>
+                        <div class="pt-4" *ngIf="reservedCount < (show?.hall?.capacity??0)">
+                            <div *ngIf="!reserved">
+                                <button
+                                    class="w-full h-12 rounded-md bg-indigo-500 text-white font-bold text-base tracking-wider active:bg-indigo-600 hover:bg-indigo-600"
+                                    (click)="onSubmit()">Confirm</button>
+                            </div>
+                            <div *ngIf="reserved">
+                                <button disabled
+                                    class="w-full h-12 disabled:bg-green-400 rounded-md text-white font-bold text-base tracking-wider">✓
+                                    Reserved</button>
+                            </div>
                         </div>
-                        <div *ngIf="reserved">
-                            <button disabled
-                                class="w-full h-12 disabled:bg-green-400 rounded-md text-white font-bold text-base tracking-wider">✓
-                                Reserved</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-        <div class="grid place-content-center gap-8">
-            <div *ngFor="let row of ['a','b','c','d','e']; let i=index" class="grid grid-flow-col gap-2">
-                <div *ngFor="let col of [0,1,2,3,4,5,6,7,8,9]; let j=index"
-                    [ngClass]="{'booked': isBooked(i,j, row),'new-reservation': isNewReservation(i,j)}"
-                    class="border p-2 hover:bg-blue-200 hover:cursor-pointer" (click)="selectSeat(i,j)">
-                    {{row}}{{col}}
+            <div class="grid place-content-center gap-8">
+                <div *ngFor="let row of ['a','b','c','d','e']; let i=index" class="grid grid-flow-col gap-2">
+                    <div *ngFor="let col of [0,1,2,3,4,5,6,7,8,9]; let j=index"
+                        [ngClass]="{'booked': isBooked(i,j, row),'new-reservation': isNewReservation(i,j)}"
+                        class="border p-2 hover:bg-blue-200 hover:cursor-pointer" (click)="selectSeat(i,j)">
+                        {{row}}{{col}}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="text-3xl opacity-0">Book tickets for the show now</div>
 </div>

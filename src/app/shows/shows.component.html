@@ -1,13 +1,13 @@
-<app-header></app-header>
-<div *ngIf="loading" class="grid place-content-center h-full w-full">
-    <mat-spinner></mat-spinner>
-</div>
-<div class="w-full overflow-auto h-full">
-    <div *ngIf="!loading" class="grid place-content-center py-8 pb-52">
-        <div class="grid grid-cols-2 grid-flow-row gap-16">
-            <ng-container *ngFor="let show of shows;">
+<div class="h-full flex flex-col">
+    <app-header class="flex-1"></app-header>
+    <div *ngIf="loading" class="grid place-content-center h-full w-full">
+        <mat-spinner></mat-spinner>
+    </div>
+    <div *ngIf="!loading" class="grid grid-cols-4 xl:grid-cols-3 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-20 overflow-auto p-16 justify-center">
+        <div *ngFor="let show of shows;">
+            <div class="grid grid-cols-2 gap-8 w-2/3">
                 <div>
-                    <img src="{{show.movie?.displayPic}}" alt="{{show.movie?.name}}" class="float-right">
+                    <img src="{{show.movie?.displayPic}}" alt="{{show.movie?.name}}" class="h-full">
                 </div>
                 <div class="flex flex-col">
                     <div>
@@ -34,10 +34,11 @@
                     </div>
                     <div class="flex-1"></div>
                     <div>
-                        <button mat-raised-button color="primary" (click)="reserveTicket(show.id)">Reserve Ticket</button>
+                        <button mat-raised-button color="primary" (click)="reserveTicket(show.id)">Reserve
+                            Ticket</button>
                     </div>
                 </div>
-            </ng-container>
+            </div>
         </div>
     </div>
 </div>

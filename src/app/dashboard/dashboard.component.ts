@@ -1,8 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import * as d3 from 'd3';
-import { ValueFn } from 'd3';
+import { aggregate, distinct, map, pipe } from 'iter-ops';
 import { Ticket } from '../reserve/ticket';
 import { ShowsService } from '../shows/shows.service';
+
+type MovieDateFrequency = {
+  movie: string;
+  data: {
+    date: Date;
+    reservations: number;
+  }[];
+};
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +23,9 @@ export class DashboardComponent implements OnInit {
   private width = 750 - (this.margin * 2);
   private height = 400 - (this.margin * 2);
 
+  tableData?: MovieDateFrequency[]
+  tableHeader?: string[]
+
   constructor(private showService: ShowsService) { }
 
   ngOnInit(): void {
@@ -24,6 +35,7 @@ export class DashboardComponent implements OnInit {
           this.data = v;
           this.createByDateGraph();
           this.createByMovieGraph();
+          this.getTableData();
         }
       });
   }
@@ -132,4 +144,55 @@ export class DashboardComponent implements OnInit {
     return new Intl.DateTimeFormat('en-US').format(new Date(ticket?.date?.toString()!))
   }
 
+
+  getDataDates(): string[] {
+    return [...pipe(this.data!,
+      map((it: Ticket) => this.getDate(it)),
+      distinct((it) => it))]
+  }
+
+  getFormattedDate(n: number): string {
+    return new Intl.DateTimeFormat('en-US').format(new Date(n))
+  }
+
+  getTableData() {
+    let d = new Map<string, Map<number, number>>()
+    let df = new Set<number>();
+    for (const it of this.data!) {
+      const movieName = it.show?.movie?.name;
+      if (d.has(movieName!)) {
+        const mdf = d.get(movieName!);
+        mdf?.set(it.date!, (mdf.get(it.date!) ?? 0) + it.show?.reservedSeats?.length!)
+        df.add(it.date!)
+        d.set(movieName!, mdf!)
+      } else {
+        const mdf = new Map<number, number>()
+        mdf.set(it.date!, it.show?.reservedSeats?.length!)
+        df.add(it.date!)
+        d.set(movieName!, mdf)
+      }
+    }
+    const dates = [...df].sort((a, b) => a - b)
+    const td: MovieDateFrequency[] = []
+    for (const it of d.entries()) {
+      td.push({
+        movie: it[0],
+        data: dates.map(d => { return {date: new Date(d), reservations: (it[1].get(d) ?? 0)}})
+      })
+    }
+    this.tableHeader = dates.map((it) => this.getFormattedDate(it))
+    this.tableData = td;
+  }
+
+  getTableHeaders(): string[] {
+    return this.tableData![0].data.map((it) => it + '')
+  }
+
+  // groups objects by property value:
+  groupBy<T>(array: T[], predicate: (v: T) => string) {
+    return array.reduce((acc, value) => {
+      (acc[predicate(value)] ||= []).push(value);
+      return acc;
+    }, {} as { [key: string]: T[] });
+  }
 }
